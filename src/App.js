@@ -62,6 +62,13 @@ function App() {
     });
   };
 
+  // Function to create a keyboard
+  const handleCreate = (keyboard) => {
+    axios.post(url + "/keyboards", keyboard).then(() => {
+      getKeyboards();
+    });
+  };
+
   // UseEffect to run getKeyboards right away
   React.useEffect(() => {
     getKeyboards();
@@ -69,6 +76,9 @@ function App() {
 
   return (
     <div className="App">
+      <Link to="/create">
+        <button>Create a Keeb</button>
+      </Link>
       <Switch>
         <Route
           exact
@@ -82,7 +92,7 @@ function App() {
             />
           )}
         />
-        {/* <Route
+        <Route
           exact
           path="/create"
           render={(rp) => (
@@ -93,7 +103,7 @@ function App() {
               handleSubmit={handleCreate}
             />
           )}
-        /> */}
+        />
         <Route
           exact
           path="/edit"
