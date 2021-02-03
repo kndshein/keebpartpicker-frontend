@@ -22,11 +22,18 @@ const Display = (props) => {
               </div>
               <button
                 onClick={() => {
-                  props.selectCookbook(keyboard);
+                  props.selectKeyboard(keyboard);
                   props.history.push("/edit");
                 }}
               >
                 Edit
+              </button>
+              <button
+                onClick={() => {
+                  props.deleteKeyboard(keyboard);
+                }}
+              >
+                Delete
               </button>
             </article>
           );

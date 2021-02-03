@@ -8,7 +8,7 @@ import Form from "./components/Form";
 
 function App() {
   // Url variable
-  const url = "http://localhost:4000";
+  const url = "https://keebpartpicker.herokuapp.com";
 
   // Empty Keyboard for State
   const emptyKeyboard = {
@@ -31,22 +31,38 @@ function App() {
     setSelectedKeyboard(keyboard);
   };
 
-  // Function to get list of dog
-  const getKeyboards = () => {
-    fetch(url + "/keyboards")
-      .then((response) => response.json())
-      .then((data) => {
-        setKeyboards(data);
-      });
-  };
+  // Function to get list of keyboards
+  // const getKeyboards = () => {
+  //   fetch(url + "/keyboards")
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       setKeyboards(data);
+  //     });
+  // };
 
-  // Function to get list of dogs axios
+  // Function to get list of keyboards axios
   const getKeyboards = () => {
     axios.get(url + "/keyboards").then((response) => {
       setKeyboards(response.data);
     });
   };
 
+  // Function to delete a keyboard
+  const deleteKeyboard = (keyboard) => {
+    axios.delete(url + "/keyboards/" + keyboard._id).then(() => {
+      getKeyboards();
+    });
+  };
+
+  // Function to update a keyboard
+  const handleUpdate = (keyboard) => {
+    console.log("keyboard id", keyboard);
+    axios.put(url + "/keyboards/" + keyboard._id, keyboard).then(() => {
+      getKeyboards();
+    });
+  };
+
+  // UseEffect to run getKeyboards right away
   React.useEffect(() => {
     getKeyboards();
   }, []);
@@ -62,6 +78,31 @@ function App() {
               {...rp}
               keyboards={keyboards}
               selectKeyboard={selectKeyboard}
+              deleteKeyboard={deleteKeyboard}
+            />
+          )}
+        />
+        {/* <Route
+          exact
+          path="/create"
+          render={(rp) => (
+            <Form
+              {...rp}
+              label="create"
+              keyboard={emptyKeyboard}
+              handleSubmit={handleCreate}
+            />
+          )}
+        /> */}
+        <Route
+          exact
+          path="/edit"
+          render={(rp) => (
+            <Form
+              {...rp}
+              label="update"
+              keyboard={selectedKeyboard}
+              handleSubmit={handleUpdate}
             />
           )}
         />
