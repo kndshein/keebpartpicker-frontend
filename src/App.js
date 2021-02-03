@@ -1,23 +1,71 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { Route, Link, Switch } from "react-router-dom";
+import axios from "axios";
+import "./App.css";
+
+import Display from "./components/Display";
+import Form from "./components/Form";
 
 function App() {
+  // Url variable
+  const url = "http://localhost:4000";
+
+  // Empty Keyboard for State
+  const emptyKeyboard = {
+    name: "",
+    type: "",
+    parts: {
+      PCB: "",
+      switch: "",
+      keycaps: "",
+      case: "",
+    },
+  };
+
+  // States
+  const [keyboards, setKeyboards] = React.useState([]);
+  const [selectedKeyboard, setSelectedKeyboard] = React.useState(emptyKeyboard);
+
+  // Function to select keyboard
+  const selectKeyboard = (keyboard) => {
+    setSelectedKeyboard(keyboard);
+  };
+
+  // Function to get list of dog
+  const getKeyboards = () => {
+    fetch(url + "/keyboards")
+      .then((response) => response.json())
+      .then((data) => {
+        setKeyboards(data);
+      });
+  };
+
+  // Function to get list of dogs axios
+  const getKeyboards = () => {
+    axios.get(url + "/keyboards").then((response) => {
+      setKeyboards(response.data);
+    });
+  };
+
+  React.useEffect(() => {
+    getKeyboards();
+  }, []);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Switch>
+        <Route
+          exact
+          path="/"
+          render={(rp) => (
+            <Display
+              {...rp}
+              keyboards={keyboards}
+              selectKeyboard={selectKeyboard}
+            />
+          )}
+        />
+      </Switch>
     </div>
   );
 }
